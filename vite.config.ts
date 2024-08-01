@@ -1,10 +1,18 @@
 /// <reference types="vitest/globals" />
+
 import react from '@vitejs/plugin-react';
+import path from 'node:path';
 import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@ui': path.resolve(__dirname, 'src/ui'),
+      '@marvel': path.resolve(__dirname, 'src/marvel'),
+    },
+  },
   test: {
     globals: true,
     environment: 'jsdom',

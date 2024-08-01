@@ -1,4 +1,4 @@
-# Marvel Heroes
+# Marvel Characters
 
 A React project for searching your favourite Marvel characters
 
