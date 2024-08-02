@@ -1,5 +1,5 @@
 import { CharactersList } from "@marvel/components";
-import { Pagination } from "@ui/components";
+import { Attribution, Pagination } from "@ui/components";
 
 export const CharactersPage: React.FC = () => {
   return (
@@ -7,6 +7,9 @@ export const CharactersPage: React.FC = () => {
       <h1>Search your character</h1>
       <CharactersList />
       <Pagination />
+      <footer>
+        <Attribution />
+      </footer>
     </>
   );
 };
