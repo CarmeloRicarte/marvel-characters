@@ -1,29 +1,16 @@
 import { CharactersList } from "@marvel/components";
-import { Attribution, Pagination } from "@ui/components";
-import { useEffect } from "react";
-import { getCharactersPaginated } from "../../helpers";
-
-const getCharacters = async () => {
-  await getCharactersPaginated()
-    .then((res) => console.log(res))
-    .catch((error) => {
-      console.log(error);
-    });
-};
+import { Attribution } from "@ui/components";
+import styles from "./Characters.module.css";
 
 export const CharactersPage: React.FC = () => {
-  useEffect(() => {
-    getCharacters();
-  }, []);
-
   return (
-    <>
+    <main className={styles.main}>
       <h1>Search your character</h1>
       <CharactersList />
-      <Pagination />
+
       <footer>
         <Attribution />
       </footer>
-    </>
+    </main>
   );
 };
