@@ -1,0 +1,33 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: white;
+  & img {
+    object-fit: cover;
+    aspect-ratio: 16/9;
+  }
+
+  & button {
+    align-self: flex-end;
+    margin: auto 1rem 1rem 1rem;
+  }
+}
+
+.card-data-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 1rem;
+}
+
+.card-description {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
