@@ -25,6 +25,7 @@
     "paths": {
       "@ui/*": ["src/ui/*"],
       "@marvel/*": ["src/marvel/*"],
+      "@assets/*": ["src/assets/*"],
       "@/*": ["src/*"]
     }
   },

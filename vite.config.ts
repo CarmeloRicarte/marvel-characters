@@ -10,6 +10,7 @@ export default defineConfig({
     alias: {
       '@ui': path.resolve(__dirname, 'src/ui'),
       '@marvel': path.resolve(__dirname, 'src/marvel'),
+      '@assets': path.resolve(__dirname, 'src/assets'),
     },
   },
   test: {
