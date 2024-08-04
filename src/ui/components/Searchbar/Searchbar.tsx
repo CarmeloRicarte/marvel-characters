@@ -14,13 +14,17 @@ export const Searchbar: React.FC<SearchbarProps> = ({ placeholder, onClick, inpu
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitPending(true);
-    onClick(registerToSearch);
-    setIsSubmitPending(false);
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     setRegisterToSearch(e.currentTarget.value);
+  };
+
+  const handleSearch = () => {
+    setIsSubmitPending(true);
+    console.log("onClick llamado");
+    onClick(registerToSearch);
+    setIsSubmitPending(false);
   };
 
   return (
@@ -34,7 +38,12 @@ export const Searchbar: React.FC<SearchbarProps> = ({ placeholder, onClick, inpu
           placeholder={placeholder}
           className={styles["searchbar-input"]}
         />
-        <Button type="submit" styleType={ButtonStyles.INPUT} isDisabled={isSubmitPending || registerToSearch === ""}>
+        <Button
+          type="button"
+          onClick={handleSearch}
+          styleType={ButtonStyles.INPUT}
+          isDisabled={isSubmitPending || registerToSearch === ""}
+        >
           <img src="search.svg" alt="Search icon" />
         </Button>
       </form>

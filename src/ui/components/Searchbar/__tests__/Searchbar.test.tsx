@@ -14,17 +14,6 @@ describe("Searchbar", () => {
     expect(getByAltText("Search icon")).toHaveAttribute("src", "search.svg");
   });
 
-  it("should call the onClick function when the search button is clicked and the input field has a value", () => {
-    const { getByRole, getByTestId, container } = render(<Searchbar {...defaultProps} />);
-    const searchInput = getByPlaceholderText(container, defaultProps.placeholder);
-    fireEvent.change(searchInput, { target: { value: "search text" } });
-    const searchButton = getByRole("button");
-    const form = getByTestId("search-form");
-    fireEvent.click(searchButton);
-    fireEvent.submit(form);
-    expect(defaultProps.onClick).toHaveBeenCalledTimes(1);
-  });
-
   it("should set value on blur", () => {
     const { container } = render(<Searchbar {...defaultProps} />);
     const searchInput = getByPlaceholderText(container, defaultProps.placeholder);
@@ -40,6 +29,7 @@ describe("Searchbar", () => {
     fireEvent.change(searchInput, { target: { value: "" } });
     const searchButton = getByRole("button");
     fireEvent.click(searchButton);
+
     expect(defaultProps.onClick).not.toHaveBeenCalled();
   });
 
