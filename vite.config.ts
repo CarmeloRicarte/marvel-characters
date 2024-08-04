@@ -23,7 +23,9 @@ export default defineConfig({
         'src/main.tsx',
         'src/vite-env.d.ts',
         'src/**/index.ts',
-        'src/__mocks__/**/*',
+        'src/**/__mocks__/*',
+        'src/**/__tests__/*',
+        'src/**/models/*',
         'src/App.tsx',
       ],
       thresholds: {
