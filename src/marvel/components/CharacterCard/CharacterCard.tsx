@@ -13,7 +13,7 @@ type CharacterCardProps = {
 
 export const CharacterCard = ({ character }: CharacterCardProps) => {
   return (
-    <div className={styles.card}>
+    <div className={styles.card} role="listitem">
       <img src={`${character.imageData?.path}.${character.imageData?.extension}`} alt={character.name} />
       <div className={styles["card-data-container"]}>
         <h2>{character.name}</h2>
