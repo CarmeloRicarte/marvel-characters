@@ -19,6 +19,10 @@ export const Searchbar: React.FC<SearchbarProps> = ({ placeholder, onClick, inpu
     setIsSubmitPending(false);
   };
 
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    setRegisterToSearch(e.currentTarget.value);
+  };
+
   return (
     <div className={styles["searchbar-container"]}>
       <form data-testid="search-form" className={styles.form} onSubmit={handleSubmit}>
@@ -26,7 +30,7 @@ export const Searchbar: React.FC<SearchbarProps> = ({ placeholder, onClick, inpu
           name={inputName}
           type="text"
           defaultValue={registerToSearch}
-          onBlur={(e) => setRegisterToSearch(e.currentTarget.value)}
+          onBlur={handleBlur}
           placeholder={placeholder}
           className={styles["searchbar-input"]}
         />
