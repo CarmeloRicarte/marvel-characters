@@ -1,13 +1,14 @@
 import type { CharacterDataWrapper } from '../models';
+import type { ErrorResponse } from '../models/ErrorResponse';
 import { getApiParams } from './getApiParams';
 
-const BASE_URL = `${
+export const BASE_URL = `${
   import.meta.env.VITE_MARVEL_API_BASE_URL
 }/v1/public/characters`;
 
 export async function getCharactersByName(
   name: string
-): Promise<CharacterDataWrapper | undefined> {
+): Promise<CharacterDataWrapper | ErrorResponse | undefined> {
   const params = new URLSearchParams({
     ...getApiParams(),
     name,
@@ -15,10 +16,7 @@ export async function getCharactersByName(
 
   try {
     const response = await fetch(`${BASE_URL}?${params}`);
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-    return response.json() as unknown as CharacterDataWrapper;
+    return response.json();
   } catch (error) {
     console.error(error);
   }
@@ -27,7 +25,7 @@ export async function getCharactersByName(
 export async function getCharactersPaginated(
   limit = 10,
   offset = 0
-): Promise<CharacterDataWrapper | undefined> {
+): Promise<CharacterDataWrapper | ErrorResponse | undefined> {
   const params = new URLSearchParams({
     ...getApiParams(),
     limit: `${limit}`,
@@ -37,10 +35,7 @@ export async function getCharactersPaginated(
 
   try {
     const response = await fetch(`${BASE_URL}?${params}`);
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-    return response.json() as unknown as CharacterDataWrapper;
+    return response.json();
   } catch (error) {
     console.error(error);
   }

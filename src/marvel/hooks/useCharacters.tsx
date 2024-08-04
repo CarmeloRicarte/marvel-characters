@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { getCharactersByName, getCharactersPaginated } from "../helpers";
-import type { Character, CharacterDataWrapper } from "../models";
+import type { Character, CharacterDataWrapper, ErrorResponse } from "../models";
 
 const DEFAULT_STATE_VALUE = {
   characters: [],
@@ -20,8 +20,8 @@ export const useCharacters = () => {
   const getCharacters = (limit: number) => {
     setIsLoading(true);
     getCharactersPaginated(limit)
-      .then((charactersDataWrapper: CharacterDataWrapper | undefined) => {
-        if (charactersDataWrapper) {
+      .then((charactersDataWrapper: CharacterDataWrapper | ErrorResponse | undefined) => {
+        if (charactersDataWrapper && "data" in charactersDataWrapper) {
           const { data } = charactersDataWrapper;
           setCharactersData({
             characters: data?.results ?? [],
@@ -43,8 +43,8 @@ export const useCharacters = () => {
     setIsLoading(true);
     setCharactersData(DEFAULT_STATE_VALUE);
     getCharactersByName(name)
-      .then((charactersDataWrapper: CharacterDataWrapper | undefined) => {
-        if (charactersDataWrapper) {
+      .then((charactersDataWrapper: CharacterDataWrapper | ErrorResponse | undefined) => {
+        if (charactersDataWrapper && "data" in charactersDataWrapper) {
           const { data } = charactersDataWrapper;
           setCharactersData({
             characters: data?.results ?? [],
