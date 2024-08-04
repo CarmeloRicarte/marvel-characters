@@ -25,6 +25,15 @@ describe("Searchbar", () => {
     expect(defaultProps.onClick).toHaveBeenCalledTimes(1);
   });
 
+  it("should set value on blur", () => {
+    const { container } = render(<Searchbar {...defaultProps} />);
+    const searchInput = getByPlaceholderText(container, defaultProps.placeholder);
+    fireEvent.change(searchInput, { target: { value: "search text" } });
+    fireEvent.blur(searchInput);
+
+    expect(searchInput.getAttribute("value")).toBe("search text");
+  });
+
   it("should not call the onClick function when the search button is clicked and the input field has no value", () => {
     const { getByRole, container } = render(<Searchbar {...defaultProps} />);
     const searchInput = getByPlaceholderText(container, defaultProps.placeholder);
