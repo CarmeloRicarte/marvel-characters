@@ -9,9 +9,9 @@
     justify-content: center;
     align-items: center;
   }
-  & :disabled {
+  &:disabled {
     cursor: not-allowed;
-    background-color: grey;
+    background-color: #b0b0b0;
   }
 }
 
@@ -27,6 +27,19 @@
   border: 2px solid var(--black);
   & span {
     color: var(--black);
+  }
+}
+
+.button-input {
+  background-color: var(--red);
+  color: var(--white);
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  &:disabled {
+    cursor: not-allowed;
+    background-color: #8c0202;
   }
 }
 

@@ -1,10 +1,41 @@
-input {
-  background-color: white;
-  border-radius: 5px;
-  border: 1px solid rgb(97, 32, 158);
-  color: black;
-  font-size: 1.2rem;
-  outline: none;
-  padding: 10px 15px;
+.searchbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form {
+  display: flex;
   width: 100%;
+}
+
+.searchbar-input {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.searchbar-container button {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+}
+
+@media (max-width: 767px) {
+  .searchbar-input {
+    width: 100%;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .searchbar-input {
+    width: 66.67%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .searchbar-input {
+    width: 48%;
+  }
 }

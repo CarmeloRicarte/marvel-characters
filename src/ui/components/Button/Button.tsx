@@ -3,6 +3,7 @@ import styles from "./Button.module.css";
 export enum ButtonStyles {
   PRIMARY = "button-primary",
   SECONDARY = "button-secondary",
+  INPUT = "button-input",
 }
 
 type Props = {
@@ -17,7 +18,7 @@ type Props = {
 export const Button: React.FC<Props> = ({
   children,
   name,
-  onClick,
+  onClick = () => {},
   type = "button",
   isDisabled = false,
   styleType = ButtonStyles.PRIMARY,

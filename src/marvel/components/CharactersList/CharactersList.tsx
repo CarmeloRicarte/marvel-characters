@@ -1,25 +1,26 @@
-import { Pagination, Spinner } from "@ui/components";
+import { Pagination, Searchbar, Spinner } from "@ui/components";
 import { useEffect } from "react";
 import { useCharacters } from "../../hooks";
 import { CharacterCard } from "../CharacterCard/CharacterCard";
 import styles from "./CharactersList.module.css";
 
 export const CharactersList: React.FC = () => {
-  const { areMoreCharactersAvailable, getCharacters, characters, numberCharactersShowing, isLoading } = useCharacters();
+  const { areMoreCharactersAvailable, getCharacters, getByName, characters, numberCharactersShowing, isLoading } =
+    useCharacters();
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     getCharacters(10);
   }, []);
 
-  return isLoading && characters.length === 0 ? (
-    <Spinner visibility={isLoading ? "visible" : "hidden"} />
-  ) : (
+  return (
     <>
-      <Spinner visibility={isLoading ? "visible" : "hidden"} />{" "}
+      <Searchbar placeholder="Name of character" onClick={getByName} inputName="searchCharacter" />
+
       {/* Show spinner with characters at the background when click in Pagination */}
-      {characters.length === 0 ? (
-        <p>No results</p>
+      <Spinner visibility={isLoading ? "visible" : "hidden"} />
+
+      {!isLoading && characters.length === 0 ? (
+        <div>No Results</div>
       ) : (
         <>
           <div className={styles.charactersList}>
@@ -34,12 +35,14 @@ export const CharactersList: React.FC = () => {
               return <CharacterCard key={character.id} character={cardData} />;
             })}
           </div>
-          <div className={styles.pagination}>
-            <Pagination
-              isDisabled={isLoading ? true : !areMoreCharactersAvailable}
-              onClick={() => getCharacters(numberCharactersShowing + 10)}
-            />
-          </div>
+          {characters.length > 0 && (
+            <div className={styles.pagination}>
+              <Pagination
+                isDisabled={isLoading ? true : !areMoreCharactersAvailable}
+                onClick={() => getCharacters(numberCharactersShowing + 10)}
+              />
+            </div>
+          )}
         </>
       )}
     </>
