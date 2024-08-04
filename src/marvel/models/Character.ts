@@ -15,9 +15,9 @@ export type Character = {
    */
   description?: string;
   /**
-   * The date the resource was most recently modified
+   * The date the resource was most recently modified as string
    */
-  modified?: Date;
+  modified?: string;
   /**
    * The canonical URL identifier for this resource
    */
