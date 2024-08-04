@@ -21,7 +21,7 @@ export const Searchbar: React.FC<SearchbarProps> = ({ placeholder, onClick, inpu
 
   return (
     <div className={styles["searchbar-container"]}>
-      <form className={styles.form} onSubmit={handleSubmit}>
+      <form data-testid="search-form" className={styles.form} onSubmit={handleSubmit}>
         <input
           name={inputName}
           type="text"
