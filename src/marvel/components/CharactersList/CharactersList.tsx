@@ -23,7 +23,7 @@ export const CharactersList: React.FC = () => {
   const [registerToSearch, setRegisterToSearch] = useState("");
 
   useEffect(() => {
-    getCharacters(10);
+    getCharacters(10, 0);
   }, []);
 
   const resetSearchbar = () => {
@@ -47,7 +47,7 @@ export const CharactersList: React.FC = () => {
         ((characters.length === 0 && searchedCharacterResults.length === 0) ||
           (hasSearchedByName && searchedCharacterResults.length === 0)) && <div>No Results</div>}
 
-      {!isLoading && characters.length > 0 && searchedCharacterResults.length === 0 && (
+      {characters.length > 0 && searchedCharacterResults.length === 0 && (
         <>
           {characters.length > 0 && searchedCharacterResults.length === 0 && !hasSearchedByName && (
             <>
@@ -66,7 +66,7 @@ export const CharactersList: React.FC = () => {
               <div className={styles.pagination}>
                 <Pagination
                   isDisabled={isLoading ? true : !areMoreCharactersAvailable}
-                  onClick={() => getCharacters(numberCharactersShowing + 10)}
+                  onClick={() => getCharacters(numberCharactersShowing + 10, numberCharactersShowing)}
                 />
               </div>
             </>
@@ -74,7 +74,7 @@ export const CharactersList: React.FC = () => {
         </>
       )}
 
-      {!isLoading && searchedCharacterResults.length > 0 && (
+      {searchedCharacterResults.length > 0 && (
         <>
           <div className={styles.charactersList}>
             {searchedCharacterResults.map((character) => {
@@ -91,7 +91,13 @@ export const CharactersList: React.FC = () => {
           <div className={styles.pagination}>
             <Pagination
               isDisabled={isLoading ? true : !areMoreCharactersSearchedAvailable}
-              onClick={() => getByName(registerToSearch, numberSearchedCharacterResultsShowing + 10)}
+              onClick={() =>
+                getByName(
+                  registerToSearch,
+                  numberSearchedCharacterResultsShowing + 10,
+                  numberSearchedCharacterResultsShowing,
+                )
+              }
             />
           </div>
         </>

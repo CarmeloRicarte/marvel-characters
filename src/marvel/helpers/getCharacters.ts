@@ -8,12 +8,14 @@ export const BASE_URL = `${
 
 export async function getCharactersByName(
   name: string,
-  limit: number
+  limit = 10,
+  offset = 0
 ): Promise<CharacterDataWrapper | ErrorResponse | undefined> {
   const params = new URLSearchParams({
     ...getApiParams(),
     name,
     limit: `${limit}`,
+    offset: `${offset}`,
   });
 
   try {
