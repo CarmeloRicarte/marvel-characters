@@ -12,7 +12,7 @@ describe("useCharacters", () => {
     const { result } = renderHook(() => useCharacters());
     expect(result.current.characters).toEqual([]);
     expect(result.current.isLoading).toBe(true);
-    expect(result.current.areMoreCharactersAvailable).toBe(true);
+    expect(result.current.areMoreCharactersAvailable).toBe(false);
   });
 
   it("should get characters paginated", async () => {
@@ -24,7 +24,7 @@ describe("useCharacters", () => {
     vi.spyOn(global, "fetch").mockResolvedValue(response);
     const { result } = renderHook(() => useCharacters());
     act(() => {
-      result.current.getCharacters(10);
+      result.current.getCharacters(10, 0);
     });
     await waitFor(() => {
       expect(result.current.characters).toEqual(CharactersMock);
@@ -42,12 +42,11 @@ describe("useCharacters", () => {
     vi.spyOn(global, "fetch").mockResolvedValue(response);
     const { result } = renderHook(() => useCharacters());
     act(() => {
-      result.current.getCharacters(10);
+      result.current.getCharacters(10, 0);
     });
     await waitFor(() => {
       expect(result.current.characters).toEqual([]);
       expect(result.current.isLoading).toBe(false);
-      expect(result.current.numberCharactersShowing).toBe(0);
       expect(result.current.areMoreCharactersAvailable).toBe(false);
     });
   });
@@ -61,12 +60,13 @@ describe("useCharacters", () => {
     vi.spyOn(global, "fetch").mockResolvedValue(response);
     const { result } = renderHook(() => useCharacters());
     act(() => {
-      result.current.getByName("John Doe");
+      result.current.getByName("Iron Man");
     });
+    console.log(result.current.characters);
     await waitFor(() => {
-      expect(result.current.characters).toEqual(CharactersMock);
+      expect(result.current.searchedCharacterResults).toEqual(CharactersMock);
       expect(result.current.isLoading).toBe(false);
-      expect(result.current.areMoreCharactersAvailable).toBe(false);
+      expect(result.current.areMoreCharactersSearchedAvailable).toBe(false);
     });
   });
 
@@ -82,10 +82,9 @@ describe("useCharacters", () => {
       result.current.getByName("");
     });
     await waitFor(() => {
-      expect(result.current.characters).toEqual([]);
+      expect(result.current.searchedCharacterResults).toEqual([]);
       expect(result.current.isLoading).toBe(false);
-      expect(result.current.numberCharactersShowing).toBe(0);
-      expect(result.current.areMoreCharactersAvailable).toBe(false);
+      expect(result.current.areMoreCharactersSearchedAvailable).toBe(false);
     });
   });
 });

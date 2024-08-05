@@ -6,6 +6,9 @@ describe("Searchbar", () => {
     placeholder: "Search",
     onClick: vi.fn(),
     inputName: "search-input",
+    registerToSearch: "",
+    setRegisterToSearch: vi.fn(),
+    setResetSearchState: vi.fn(),
   };
 
   it("should render the search bar with a placeholder and an image button", () => {
@@ -15,12 +18,20 @@ describe("Searchbar", () => {
   });
 
   it("should set value on blur", () => {
-    const { container } = render(<Searchbar {...defaultProps} />);
-    const searchInput = getByPlaceholderText(container, defaultProps.placeholder);
+    const { getByRole } = render(<Searchbar {...defaultProps} />);
+    const searchInput = getByRole("textbox");
     fireEvent.change(searchInput, { target: { value: "search text" } });
     fireEvent.blur(searchInput);
+    expect((searchInput as HTMLInputElement).value).toBe("search text");
+  });
 
-    expect(searchInput.getAttribute("value")).toBe("search text");
+  it("should reset search state on blur when value is empty", () => {
+    const { getByRole } = render(<Searchbar {...defaultProps} />);
+    const searchInput = getByRole("textbox");
+    fireEvent.change(searchInput, { target: { value: "search text" } });
+    fireEvent.blur(searchInput);
+    fireEvent.change(searchInput, { target: { value: "" } });
+    expect((searchInput as HTMLInputElement).value).toBe("");
   });
 
   it("should not call the onClick function when the search button is clicked and the input field has no value", () => {

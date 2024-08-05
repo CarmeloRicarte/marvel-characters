@@ -2,11 +2,13 @@ import { useState } from "react";
 import { getCharactersByName, getCharactersPaginated } from "../helpers";
 import type { Character, CharacterDataWrapper, ErrorResponse } from "../models";
 
-const DEFAULT_STATE_VALUE = {
+export const DEFAULT_STATE_VALUE = {
   characters: [],
   total: 0,
   count: 0,
-  areMoreCharactersAvailable: true,
+  areMoreCharactersAvailable: false,
+  recordsPerPage: 10,
+  getFromRecordNumber: 0,
 };
 export const useCharacters = () => {
   const [charactersData, setCharactersData] = useState<{
@@ -14,21 +16,37 @@ export const useCharacters = () => {
     total: number;
     count: number;
     areMoreCharactersAvailable: boolean;
+    recordsPerPage: number;
+    getFromRecordNumber: number;
+  }>(DEFAULT_STATE_VALUE);
+  const [searchedCharacterResults, setSearchedCharacterResults] = useState<{
+    characters: Character[];
+    total: number;
+    count: number;
+    areMoreCharactersAvailable: boolean;
+    recordsPerPage: number;
+    getFromRecordNumber: number;
   }>(DEFAULT_STATE_VALUE);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasSearchedByName, setHasSearchedByName] = useState<boolean>(false);
 
-  const getCharacters = (limit: number) => {
+  const getCharacters = (limit: number, offset: number) => {
     setIsLoading(true);
-    getCharactersPaginated(limit)
+    setHasSearchedByName(false);
+    getCharactersPaginated(limit, offset)
       .then((charactersDataWrapper: CharacterDataWrapper | ErrorResponse | undefined) => {
         if (charactersDataWrapper && "data" in charactersDataWrapper) {
           const { data } = charactersDataWrapper;
           setCharactersData({
-            characters: data?.results ?? [],
+            characters: [...charactersData.characters, ...(data?.results ?? [])] ?? [],
             total: data?.total ?? 0,
             count: data?.count ?? 0,
             areMoreCharactersAvailable: data.count && data.total ? data.count < data.total : false,
+            recordsPerPage: limit,
+            getFromRecordNumber: offset,
           });
+        } else {
+          setCharactersData(DEFAULT_STATE_VALUE);
         }
       })
       .catch((error) => {
@@ -39,19 +57,24 @@ export const useCharacters = () => {
       });
   };
 
-  const getByName = (name: string) => {
+  const getByName = (name: string, limit = 10, offset = 0) => {
     setIsLoading(true);
-    setCharactersData(DEFAULT_STATE_VALUE);
-    getCharactersByName(name)
+    setHasSearchedByName(false);
+    setSearchedCharacterResults(DEFAULT_STATE_VALUE);
+    getCharactersByName(name, limit, offset)
       .then((charactersDataWrapper: CharacterDataWrapper | ErrorResponse | undefined) => {
         if (charactersDataWrapper && "data" in charactersDataWrapper) {
           const { data } = charactersDataWrapper;
-          setCharactersData({
-            characters: data?.results ?? [],
+          setSearchedCharacterResults({
+            characters: [...searchedCharacterResults.characters, ...(data?.results ?? [])] ?? [],
             total: data?.total ?? 0,
             count: data?.count ?? 0,
             areMoreCharactersAvailable: data.count && data.total ? data.count < data.total : false,
+            recordsPerPage: limit,
+            getFromRecordNumber: offset,
           });
+        } else {
+          setCharactersData(DEFAULT_STATE_VALUE);
         }
       })
       .catch((error) => {
@@ -59,15 +82,24 @@ export const useCharacters = () => {
       })
       .finally(() => {
         setIsLoading(false);
+        setHasSearchedByName(true);
       });
   };
 
   return {
     characters: charactersData.characters,
+    searchedCharacterResults: searchedCharacterResults.characters,
+    setSearchedCharacterResults,
+    hasSearchedByName,
+    setHasSearchedByName,
     getCharacters,
     getByName,
     areMoreCharactersAvailable: charactersData.areMoreCharactersAvailable,
+    areMoreCharactersSearchedAvailable: searchedCharacterResults.areMoreCharactersAvailable,
     isLoading,
-    numberCharactersShowing: charactersData.count,
+    recordsPerPageCharacters: charactersData.recordsPerPage,
+    recordsPerPageSearch: searchedCharacterResults.recordsPerPage,
+    getFromRecordNumberCharacters: charactersData.getFromRecordNumber,
+    getFromRecordNumberSearch: searchedCharacterResults.getFromRecordNumber,
   };
 };
