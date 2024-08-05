@@ -7,6 +7,8 @@ export const DEFAULT_STATE_VALUE = {
   total: 0,
   count: 0,
   areMoreCharactersAvailable: false,
+  recordsPerPage: 10,
+  getFromRecordNumber: 0,
 };
 export const useCharacters = () => {
   const [charactersData, setCharactersData] = useState<{
@@ -14,12 +16,16 @@ export const useCharacters = () => {
     total: number;
     count: number;
     areMoreCharactersAvailable: boolean;
+    recordsPerPage: number;
+    getFromRecordNumber: number;
   }>(DEFAULT_STATE_VALUE);
   const [searchedCharacterResults, setSearchedCharacterResults] = useState<{
     characters: Character[];
     total: number;
     count: number;
     areMoreCharactersAvailable: boolean;
+    recordsPerPage: number;
+    getFromRecordNumber: number;
   }>(DEFAULT_STATE_VALUE);
   const [isLoading, setIsLoading] = useState(true);
   const [hasSearchedByName, setHasSearchedByName] = useState<boolean>(false);
@@ -36,6 +42,8 @@ export const useCharacters = () => {
             total: data?.total ?? 0,
             count: data?.count ?? 0,
             areMoreCharactersAvailable: data.count && data.total ? data.count < data.total : false,
+            recordsPerPage: limit,
+            getFromRecordNumber: offset,
           });
         } else {
           setCharactersData(DEFAULT_STATE_VALUE);
@@ -62,6 +70,8 @@ export const useCharacters = () => {
             total: data?.total ?? 0,
             count: data?.count ?? 0,
             areMoreCharactersAvailable: data.count && data.total ? data.count < data.total : false,
+            recordsPerPage: limit,
+            getFromRecordNumber: offset,
           });
         } else {
           setCharactersData(DEFAULT_STATE_VALUE);
@@ -87,7 +97,9 @@ export const useCharacters = () => {
     areMoreCharactersAvailable: charactersData.areMoreCharactersAvailable,
     areMoreCharactersSearchedAvailable: searchedCharacterResults.areMoreCharactersAvailable,
     isLoading,
-    numberCharactersShowing: charactersData.count,
-    numberSearchedCharacterResultsShowing: searchedCharacterResults.count,
+    recordsPerPageCharacters: charactersData.recordsPerPage,
+    recordsPerPageSearch: searchedCharacterResults.recordsPerPage,
+    getFromRecordNumberCharacters: charactersData.getFromRecordNumber,
+    getFromRecordNumberSearch: searchedCharacterResults.getFromRecordNumber,
   };
 };

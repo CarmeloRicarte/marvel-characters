@@ -47,7 +47,6 @@ describe("useCharacters", () => {
     await waitFor(() => {
       expect(result.current.characters).toEqual([]);
       expect(result.current.isLoading).toBe(false);
-      expect(result.current.numberCharactersShowing).toBe(0);
       expect(result.current.areMoreCharactersAvailable).toBe(false);
     });
   });
@@ -85,7 +84,6 @@ describe("useCharacters", () => {
     await waitFor(() => {
       expect(result.current.searchedCharacterResults).toEqual([]);
       expect(result.current.isLoading).toBe(false);
-      expect(result.current.numberSearchedCharacterResultsShowing).toBe(0);
       expect(result.current.areMoreCharactersSearchedAvailable).toBe(false);
     });
   });

@@ -12,9 +12,11 @@ export const CharactersList: React.FC = () => {
     characters,
     searchedCharacterResults,
     areMoreCharactersSearchedAvailable,
-    numberSearchedCharacterResultsShowing,
+    recordsPerPageCharacters,
+    recordsPerPageSearch,
     setSearchedCharacterResults,
-    numberCharactersShowing,
+    getFromRecordNumberCharacters,
+    getFromRecordNumberSearch,
     isLoading,
     hasSearchedByName,
     setHasSearchedByName,
@@ -66,7 +68,7 @@ export const CharactersList: React.FC = () => {
               <div className={styles.pagination}>
                 <Pagination
                   isDisabled={isLoading ? true : !areMoreCharactersAvailable}
-                  onClick={() => getCharacters(numberCharactersShowing + 10, numberCharactersShowing)}
+                  onClick={() => getCharacters(recordsPerPageCharacters, getFromRecordNumberCharacters + 10)}
                 />
               </div>
             </>
@@ -91,13 +93,7 @@ export const CharactersList: React.FC = () => {
           <div className={styles.pagination}>
             <Pagination
               isDisabled={isLoading ? true : !areMoreCharactersSearchedAvailable}
-              onClick={() =>
-                getByName(
-                  registerToSearch,
-                  numberSearchedCharacterResultsShowing + 10,
-                  numberSearchedCharacterResultsShowing,
-                )
-              }
+              onClick={() => getByName(registerToSearch, recordsPerPageSearch, getFromRecordNumberSearch + 10)}
             />
           </div>
         </>
