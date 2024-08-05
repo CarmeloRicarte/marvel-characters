@@ -43,7 +43,7 @@ export const getByNameWithNoResultsMock: CharacterDataWrapper = {
   etag: '79ef3436d0dc139b17693635b99776556e29f495',
   data: {
     offset: 0,
-    limit: 20,
+    limit: 10,
     total: 0,
     count: 0,
     results: [],
@@ -99,7 +99,7 @@ export const getByNameWithResultsMock: CharacterDataWrapper = {
   etag: '0ffa7d5f5964c42e157fe41dfb6afd8cb25e74e4',
   data: {
     offset: 0,
-    limit: 20,
+    limit: 10,
     total: 1,
     count: 1,
     results: CharactersMock,
