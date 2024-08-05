@@ -6,10 +6,19 @@ type SearchbarProps = {
   placeholder: string;
   onClick: (textToSearch: string) => void;
   inputName: string;
+  registerToSearch: string;
+  setRegisterToSearch: (textToSearch: string) => void;
+  setResetSearchState: () => void;
 };
 
-export const Searchbar: React.FC<SearchbarProps> = ({ placeholder, onClick, inputName }) => {
-  const [registerToSearch, setRegisterToSearch] = useState("");
+export const Searchbar: React.FC<SearchbarProps> = ({
+  placeholder,
+  onClick,
+  inputName,
+  registerToSearch,
+  setRegisterToSearch,
+  setResetSearchState,
+}) => {
   const [isSubmitPending, setIsSubmitPending] = useState(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -17,12 +26,15 @@ export const Searchbar: React.FC<SearchbarProps> = ({ placeholder, onClick, inpu
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value;
     setRegisterToSearch(e.currentTarget.value);
+    if (!value) {
+      setResetSearchState();
+    }
   };
 
   const handleSearch = () => {
     setIsSubmitPending(true);
-    console.log("onClick llamado");
     onClick(registerToSearch);
     setIsSubmitPending(false);
   };

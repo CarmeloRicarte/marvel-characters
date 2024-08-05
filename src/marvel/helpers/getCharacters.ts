@@ -7,11 +7,13 @@ export const BASE_URL = `${
 }/v1/public/characters`;
 
 export async function getCharactersByName(
-  name: string
+  name: string,
+  limit: number
 ): Promise<CharacterDataWrapper | ErrorResponse | undefined> {
   const params = new URLSearchParams({
     ...getApiParams(),
     name,
+    limit: `${limit}`,
   });
 
   try {
