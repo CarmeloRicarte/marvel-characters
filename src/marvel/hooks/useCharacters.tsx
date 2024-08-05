@@ -6,7 +6,7 @@ export const DEFAULT_STATE_VALUE = {
   characters: [],
   total: 0,
   count: 0,
-  areMoreCharactersAvailable: true,
+  areMoreCharactersAvailable: false,
 };
 export const useCharacters = () => {
   const [charactersData, setCharactersData] = useState<{
@@ -37,6 +37,8 @@ export const useCharacters = () => {
             count: data?.count ?? 0,
             areMoreCharactersAvailable: data.count && data.total ? data.count < data.total : false,
           });
+        } else {
+          setCharactersData(DEFAULT_STATE_VALUE);
         }
       })
       .catch((error) => {
@@ -61,6 +63,8 @@ export const useCharacters = () => {
             count: data?.count ?? 0,
             areMoreCharactersAvailable: data.count && data.total ? data.count < data.total : false,
           });
+        } else {
+          setCharactersData(DEFAULT_STATE_VALUE);
         }
       })
       .catch((error) => {
