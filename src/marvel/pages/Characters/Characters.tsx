@@ -7,7 +7,7 @@ export const CharactersPage: React.FC = () => {
     <main className={styles.main}>
       <h1>Search your character</h1>
       <CharactersList />
-      <footer>
+      <footer className={styles.footer}>
         <Attribution />
       </footer>
     </main>
