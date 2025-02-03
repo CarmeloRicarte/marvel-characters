@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { getCharactersByName, getCharactersPaginated } from "../helpers";
-import type { Character, CharacterDataWrapper, ErrorResponse } from "../models";
+import { useState } from 'react';
+import { getCharactersByName, getCharactersPaginated } from '../helpers';
+import type { Character, CharacterDataWrapper, ErrorResponse } from '../models';
 
 export const DEFAULT_STATE_VALUE = {
   characters: [],
@@ -34,21 +34,32 @@ export const useCharacters = () => {
     setIsLoading(true);
     setHasSearchedByName(false);
     getCharactersPaginated(limit, offset)
-      .then((charactersDataWrapper: CharacterDataWrapper | ErrorResponse | undefined) => {
-        if (charactersDataWrapper && "data" in charactersDataWrapper) {
-          const { data } = charactersDataWrapper;
-          setCharactersData({
-            characters: [...charactersData.characters, ...(data?.results ?? [])] ?? [],
-            total: data?.total ?? 0,
-            count: data?.count ?? 0,
-            areMoreCharactersAvailable: data.count && data.total ? data.count < data.total : false,
-            recordsPerPage: limit,
-            getFromRecordNumber: offset,
-          });
-        } else {
-          setCharactersData(DEFAULT_STATE_VALUE);
+      .then(
+        (
+          charactersDataWrapper:
+            | CharacterDataWrapper
+            | ErrorResponse
+            | undefined
+        ) => {
+          if (charactersDataWrapper && 'data' in charactersDataWrapper) {
+            const { data } = charactersDataWrapper;
+            setCharactersData({
+              characters: [
+                ...charactersData.characters,
+                ...(data?.results ?? []),
+              ],
+              total: data?.total ?? 0,
+              count: data?.count ?? 0,
+              areMoreCharactersAvailable:
+                data.count && data.total ? data.count < data.total : false,
+              recordsPerPage: limit,
+              getFromRecordNumber: offset,
+            });
+          } else {
+            setCharactersData(DEFAULT_STATE_VALUE);
+          }
         }
-      })
+      )
       .catch((error) => {
         console.error(error);
       })
@@ -57,26 +68,37 @@ export const useCharacters = () => {
       });
   };
 
-  const getByName = (name: string, limit = 10, offset = 0) => {
+  const getByName = (nameStartsWith: string, limit = 10, offset = 0) => {
     setIsLoading(true);
     setHasSearchedByName(false);
     setSearchedCharacterResults(DEFAULT_STATE_VALUE);
-    getCharactersByName(name, limit, offset)
-      .then((charactersDataWrapper: CharacterDataWrapper | ErrorResponse | undefined) => {
-        if (charactersDataWrapper && "data" in charactersDataWrapper) {
-          const { data } = charactersDataWrapper;
-          setSearchedCharacterResults({
-            characters: [...searchedCharacterResults.characters, ...(data?.results ?? [])] ?? [],
-            total: data?.total ?? 0,
-            count: data?.count ?? 0,
-            areMoreCharactersAvailable: data.count && data.total ? data.count < data.total : false,
-            recordsPerPage: limit,
-            getFromRecordNumber: offset,
-          });
-        } else {
-          setCharactersData(DEFAULT_STATE_VALUE);
+    getCharactersByName(nameStartsWith, limit, offset)
+      .then(
+        (
+          charactersDataWrapper:
+            | CharacterDataWrapper
+            | ErrorResponse
+            | undefined
+        ) => {
+          if (charactersDataWrapper && 'data' in charactersDataWrapper) {
+            const { data } = charactersDataWrapper;
+            setSearchedCharacterResults({
+              characters: [
+                ...searchedCharacterResults.characters,
+                ...(data?.results ?? []),
+              ],
+              total: data?.total ?? 0,
+              count: data?.count ?? 0,
+              areMoreCharactersAvailable:
+                data.count && data.total ? data.count < data.total : false,
+              recordsPerPage: limit,
+              getFromRecordNumber: offset,
+            });
+          } else {
+            setCharactersData(DEFAULT_STATE_VALUE);
+          }
         }
-      })
+      )
       .catch((error) => {
         console.error(error);
       })
@@ -95,7 +117,8 @@ export const useCharacters = () => {
     getCharacters,
     getByName,
     areMoreCharactersAvailable: charactersData.areMoreCharactersAvailable,
-    areMoreCharactersSearchedAvailable: searchedCharacterResults.areMoreCharactersAvailable,
+    areMoreCharactersSearchedAvailable:
+      searchedCharacterResults.areMoreCharactersAvailable,
     isLoading,
     recordsPerPageCharacters: charactersData.recordsPerPage,
     recordsPerPageSearch: searchedCharacterResults.recordsPerPage,
