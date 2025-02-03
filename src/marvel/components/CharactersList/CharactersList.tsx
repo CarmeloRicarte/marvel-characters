@@ -45,14 +45,14 @@ export const CharactersList: React.FC = () => {
     <>
       <Searchbar
         placeholder="Name of character"
-        onClick={getByName}
+        onChange={getByName}
         registerToSearch={registerToSearch}
         setRegisterToSearch={setRegisterToSearch}
         setResetSearchState={resetSearchbar}
         inputName="searchCharacter"
       />
       {/* Show spinner with characters at the background when click in Pagination */}
-      <Spinner visibility={isLoading ? "visible" : "hidden"} />
+      <Spinner visibility={isLoading && !registerToSearch ? "visible" : "hidden"} />
       {!isLoading &&
         ((characters.length === 0 && searchedCharacterResults.length === 0) ||
           (hasSearchedByName && searchedCharacterResults.length === 0)) && <div>No Results</div>}
