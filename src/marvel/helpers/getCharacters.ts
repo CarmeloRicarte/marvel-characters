@@ -7,13 +7,13 @@ export const BASE_URL = `${
 }/v1/public/characters`;
 
 export async function getCharactersByName(
-  name: string,
+  nameStartsWith: string,
   limit = 10,
   offset = 0
 ): Promise<CharacterDataWrapper | ErrorResponse | undefined> {
   const params = new URLSearchParams({
     ...getApiParams(),
-    name,
+    nameStartsWith,
     limit: `${limit}`,
     offset: `${offset}`,
   });
