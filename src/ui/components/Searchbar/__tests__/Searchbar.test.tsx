@@ -1,73 +1,70 @@
-import { act, fireEvent, getByPlaceholderText, render, waitFor } from "@testing-library/react";
-import { Searchbar } from "../Searchbar";
+import { fireEvent, render } from '@testing-library/react';
+import { vi } from 'vitest';
+import { Searchbar } from '../Searchbar';
 
-describe("Searchbar", () => {
+describe('Searchbar', () => {
   const defaultProps = {
-    placeholder: "Search",
-    onClick: vi.fn(),
-    inputName: "search-input",
-    registerToSearch: "",
+    placeholder: 'Search',
+    inputName: 'search-input',
+    registerToSearch: '',
     setRegisterToSearch: vi.fn(),
     setResetSearchState: vi.fn(),
+    onChange: vi.fn(),
   };
 
-  it("should render the search bar with a placeholder and an image button", () => {
-    const { getByPlaceholderText, getByAltText } = render(<Searchbar {...defaultProps} />);
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.clearAllTimers();
+    vi.clearAllMocks();
+  });
+
+  it('should render the search bar with a placeholder', () => {
+    const { getByPlaceholderText } = render(<Searchbar {...defaultProps} />);
     expect(getByPlaceholderText(defaultProps.placeholder)).toBeInTheDocument();
-    expect(getByAltText("Search icon")).toHaveAttribute("src", "search.svg");
   });
 
-  it("should set value on blur", () => {
+  it('should update registerToSearch on input change', () => {
     const { getByRole } = render(<Searchbar {...defaultProps} />);
-    const searchInput = getByRole("textbox");
-    fireEvent.change(searchInput, { target: { value: "search text" } });
-    fireEvent.blur(searchInput);
-    expect((searchInput as HTMLInputElement).value).toBe("search text");
+    const searchInput = getByRole('textbox');
+
+    fireEvent.change(searchInput, { target: { value: 'search text' } });
+
+    expect(defaultProps.setRegisterToSearch).toHaveBeenCalledWith(
+      'search text'
+    );
   });
 
-  it("should reset search state on blur when value is empty", () => {
+  it('should reset search state on blur when value is empty', () => {
     const { getByRole } = render(<Searchbar {...defaultProps} />);
-    const searchInput = getByRole("textbox");
-    fireEvent.change(searchInput, { target: { value: "search text" } });
+    const searchInput = getByRole('textbox');
+    fireEvent.change(searchInput, { target: { value: 'search text' } });
     fireEvent.blur(searchInput);
-    fireEvent.change(searchInput, { target: { value: "" } });
-    expect((searchInput as HTMLInputElement).value).toBe("");
+    fireEvent.change(searchInput, { target: { value: '' } });
+    expect((searchInput as HTMLInputElement).value).toBe('');
   });
 
-  it("should not call the onClick function when the search button is clicked and the input field has no value", () => {
-    const { getByRole, container } = render(<Searchbar {...defaultProps} />);
-    const searchInput = getByPlaceholderText(container, defaultProps.placeholder);
-    fireEvent.change(searchInput, { target: { value: "" } });
-    const searchButton = getByRole("button");
-    fireEvent.click(searchButton);
+  it('should not trigger onChange if input length is less than 5 characters', () => {
+    const { getByRole } = render(<Searchbar {...defaultProps} />);
+    const searchInput = getByRole('textbox');
 
-    expect(defaultProps.onClick).not.toHaveBeenCalled();
+    fireEvent.change(searchInput, { target: { value: 'test' } });
+
+    vi.runAllTimers();
+    expect(defaultProps.onChange).not.toHaveBeenCalled();
   });
 
-  it("should disable the search button when submitting is pending", () => {
-    const { getByRole, container, getByTestId } = render(<Searchbar {...defaultProps} />);
-    const searchInput = getByPlaceholderText(container, defaultProps.placeholder);
-    act(() => {
-      fireEvent.change(searchInput, { target: { value: "search text" } });
-    });
-    const searchButton = getByRole("button");
-    const form = getByTestId("search-form");
-    fireEvent.click(searchButton);
-    fireEvent.submit(form);
-    expect(searchButton).toBeDisabled();
-  });
+  it('should trigger debounced onChange when input length is greater than 4 characters', async () => {
+    const { getByRole } = render(<Searchbar {...defaultProps} />);
+    const searchInput = getByRole('textbox');
 
-  it("should enable the search button when submitting is complete", () => {
-    const { getByRole, getByTestId, container } = render(<Searchbar {...defaultProps} />);
-    const searchInput = getByPlaceholderText(container, defaultProps.placeholder);
-    fireEvent.change(searchInput, { target: { value: "search text" } });
-    const searchButton = getByRole("button");
-    const form = getByTestId("search-form");
-    fireEvent.click(searchButton);
-    fireEvent.submit(form);
-    expect(searchButton).toBeDisabled();
-    waitFor(() => {
-      expect(searchButton).not.toBeDisabled();
-    });
+    fireEvent.change(searchInput, { target: { value: 'search text' } });
+
+    expect(defaultProps.onChange).not.toHaveBeenCalled();
+    vi.runAllTimers();
+
+    expect(defaultProps.onChange).toHaveBeenCalledWith('search text');
   });
 });

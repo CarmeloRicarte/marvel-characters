@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { Button, ButtonStyles } from "../Button/Button";
+import { useCallback } from "react";
+import { debounce } from "../../../utils/debounce";
 import styles from "./Searchbar.module.css";
 
 type SearchbarProps = {
   placeholder: string;
-  onClick: (textToSearch: string) => void;
+  onChange: (textToSearch: string) => void;
   inputName: string;
   registerToSearch: string;
   setRegisterToSearch: (textToSearch: string) => void;
@@ -13,30 +13,29 @@ type SearchbarProps = {
 
 export const Searchbar: React.FC<SearchbarProps> = ({
   placeholder,
-  onClick,
+  onChange,
   inputName,
   registerToSearch,
   setRegisterToSearch,
   setResetSearchState,
 }) => {
-  const [isSubmitPending, setIsSubmitPending] = useState(false);
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
 
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+  const debounceSearch = useCallback(debounce(onChange, 500), []);
+
+  const handleChange = (e: React.FocusEvent<HTMLInputElement>) => {
     const value = e.currentTarget.value;
+
     setRegisterToSearch(e.currentTarget.value);
     if (!value) {
       setResetSearchState();
     }
-  };
 
-  const handleSearch = () => {
-    setIsSubmitPending(true);
-    onClick(registerToSearch);
-    setIsSubmitPending(false);
+    if (value.length > 4) {
+      debounceSearch(value);
+    }
   };
 
   return (
@@ -45,19 +44,11 @@ export const Searchbar: React.FC<SearchbarProps> = ({
         <input
           name={inputName}
           type="text"
-          defaultValue={registerToSearch}
-          onBlur={handleBlur}
+          value={registerToSearch}
+          onChange={handleChange}
           placeholder={placeholder}
           className={styles["searchbar-input"]}
         />
-        <Button
-          type="button"
-          onClick={handleSearch}
-          styleType={ButtonStyles.INPUT}
-          isDisabled={isSubmitPending || registerToSearch === ""}
-        >
-          <img src="search.svg" alt="Search icon" />
-        </Button>
       </form>
     </div>
   );
