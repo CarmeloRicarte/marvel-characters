@@ -25,3 +25,4 @@ dist-ssr
 
 coverage/
 vite.config.js
+.env
